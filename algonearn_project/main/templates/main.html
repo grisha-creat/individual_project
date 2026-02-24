@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная | Массивы и сортировка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0f1a;
+            color: #ccd6f0;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* неоновый контейнер с эффектом свечения */
+        .neon-card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(10, 20, 30, 0.75);
+            backdrop-filter: blur(8px);
+            border: 2px solid #00ffe1;
+            box-shadow: 0 0 20px #00ffe1, 0 0 40px #00b8ff, inset 0 0 15px rgba(0, 255, 255, 0.3);
+            border-radius: 32px;
+            padding: 2.5rem 2rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .neon-card:hover {
+            box-shadow: 0 0 30px #00ffff, 0 0 60px #1effbc, inset 0 0 20px #7effe6;
+        }
+
+        /* заголовки с неоном */
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            text-align: center;
+            color: #a0ffec;
+            text-shadow: 0 0 5px #00ffe1, 0 0 15px #00c8ff, 0 0 30px #0099ff;
+            letter-spacing: 2px;
+            margin-bottom: 0.75rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: #aaffdd;
+            text-shadow: 0 0 4px #00ffe1, 0 0 12px #00ccaa;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #0ff;
+            padding-left: 1.2rem;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: #b5ffea;
+            text-shadow: 0 0 3px #1effbc;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #cce5ff;
+        }
+
+        /* навигационные блоки */
+        .nav-highlight {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin: 2.5rem 0 1rem;
+            justify-content: center;
+        }
+
+        .nav-item {
+            flex: 1 1 200px;
+            background: rgba(0, 255, 200, 0.07);
+            border: 1px solid #0ff;
+            border-radius: 30px;
+            padding: 1.8rem 1.2rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+        }
+
+        .nav-item:hover {
+            transform: translateY(-6px);
+            background: rgba(0, 255, 200, 0.15);
+            box-shadow: 0 0 28px #00ffe1, 0 0 40px #0077ff;
+            border-color: #ffffff;
+        }
+
+        .nav-item span {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 8px cyan);
+        }
+
+        .nav-item strong {
+            font-size: 1.8rem;
+            color: #adffd8;
+            text-shadow: 0 0 5px cyan;
+        }
+
+        .nav-item p {
+            font-size: 1rem;
+            margin: 0.8rem 0 0;
+            color: #bbf0ff;
+        }
+
+        /* кнопка в стиле неон */
+        .neon-button {
+            display: inline-block;
+            background: transparent;
+            color: #00ffd5;
+            font-size: 1.3rem;
+            font-weight: 600;
+            padding: 0.8rem 2.5rem;
+            border-radius: 50px;
+            border: 2px solid #0ff;
+            text-decoration: none;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px #0ff, inset 0 0 10px #0ff;
+            transition: all 0.2s;
+            margin-top: 1rem;
+            margin-right: 1rem;
+        }
+
+        .neon-button:hover {
+            background: #0ff;
+            color: #0a121c;
+            box-shadow: 0 0 30px cyan, 0 0 60px deepskyblue;
+            border-color: white;
+        }
+
+        /* цель + задачи в виде сетки */
+        .goal-block {
+            background: rgba(0, 255, 200, 0.05);
+            border-radius: 40px;
+            padding: 2rem;
+            border: 1px solid #1effbc;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.2), 0 0 30px rgba(0, 255, 200, 0.2);
+            margin: 2rem 0;
+        }
+
+        .tasks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.8rem;
+        }
+
+        .task-item {
+            background: rgba(0, 30, 40, 0.6);
+            border-radius: 24px;
+            padding: 1.5rem 1rem;
+            border-left: 6px solid #0ff;
+            box-shadow: 0 0 12px #00b8b0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            backdrop-filter: blur(3px);
+        }
+
+        .task-item::before {
+            content: "⚡";
+            color: #0ff;
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 6px cyan);
+        }
+
+        /* футер с навигацией по сайту (краткий обзор) */
+        .site-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: space-between;
+            margin: 2rem 0 1.5rem;
+        }
+
+        .preview-card {
+            background: #021016;
+            border: 1px solid #0ff;
+            border-radius: 28px;
+            padding: 1.8rem 1.5rem;
+            flex: 1 1 250px;
+            box-shadow: 0 0 20px #00b8b0;
+        }
+
+        .preview-card h4 {
+            font-size: 2rem;
+            color: #a0ffec;
+            text-shadow: 0 0 6px cyan;
+            margin-bottom: 0.8rem;
+        }
+
+        .preview-card ul {
+            list-style: none;
+        }
+
+        .preview-card li {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-card li::before {
+            content: "▹";
+            color: #0ff;
+            font-size: 1.5rem;
+            line-height: 1;
+            text-shadow: 0 0 8px cyan;
+        }
+
+        /* декоративная линия */
+        .divider {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #0ff, #1effbc, #0ff, transparent);
+            box-shadow: 0 0 15px #0ff;
+            margin: 2rem 0;
+        }
+
+        /* небольшие детали */
+        .glow-text {
+            color: #a8fff0;
+            text-shadow: 0 0 4px #0ff;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 1rem;
+            color: #6699cc;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            .neon-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-card">
+        <!-- Приветствие и тема проекта -->
+        <h1>⚡ СТРУКТУРЫ ДАННЫХ ⚡</h1>
+        <h1 style="font-size: 2.6rem; margin-top: -0.5rem;">МАССИВЫ · СОРТИРОВКА</h1>
+        <div style="text-align: center; margin: 1rem 0 0.5rem;">
+            <span style="background: #0a1f26; padding: 0.2rem 1.5rem; border-radius: 60px; border: 1px solid cyan; box-shadow: 0 0 8px cyan; font-weight: 600;">индивидуальный проект</span>
+        </div>
+
+        <!-- Краткое введение -->
+        <h2>⚡ приветствие</h2>
+        <p>Структурированные типы данных — способ организации сложной информации. В центре вселенной программирования находится <span class="glow-text"><strong>массив</strong></span>: упорядоченный набор элементов, доступ к которым мгновенен по индексу. Массивы — это фундамент, на котором строятся алгоритмы, базы данных и интерфейсы.</p>
+        <p>Сортировка превращает хаос в порядок: поиск, анализ, принятие решений — всё ускоряется, когда данные организованы. Понимание сортировок даёт ключ к написанию эффективного кода.</p>
+
+        <!-- Цель и задачи проекта (сформулировано) -->
+        <div class="goal-block">
+            <h3 style="margin-bottom: 0.2rem;">🎯 цель проекта</h3>
+            <p style="font-size: 1.5rem; font-weight: 600; text-shadow: 0 0 5px cyan;">«Объяснить принципы работы с массивами и научить основным алгоритмам сортировки»</p>
+
+            <div class="tasks">
+                <div class="task-item"><strong>Задача 1:</strong> Показать внутреннее устройство массивов (индексация, память, типы)</div>
+                <div class="task-item"><strong>Задача 2:</strong> Разобрать базовые операции: поиск, вставка, удаление</div>
+                <div class="task-item"><strong>Задача 3:</strong> Визуализировать пузырьковую, выбором и вставками сортировки</div>
+                <div class="task-item"><strong>Задача 4:</strong> Дать возможность пользователю самому управлять процессом сортировки</div>
+            </div>
+        </div>
+
+        <!-- Навигация по сайту (краткий обзор) + неоновые кнопки -->
+        <h2>🌀 навигация / разделы</h2>
+        <div class="nav-highlight">
+            <div class="nav-item">
+                <span>📘</span>
+                <strong>ТЕОРИЯ</strong>
+                <p>типы данных · массивы · алгоритмы сортировки · сложность</p>
+            </div>
+            <div class="nav-item">
+                <span>⚙️</span>
+                <strong>ПРАКТИКА</strong>
+                <p>интерактивная песочница · визуализатор · сравнение алгоритмов</p>
+            </div>
+            <div class="nav-item">
+                <span>🧪</span>
+                <strong>ТЕСТ</strong>
+                <p>проверь знания · вопросы по теории массивов</p>
+            </div>
+        </div>
+
+        <!-- чуть подробнее про теорию и практику (краткий обзор) -->
+        <div class="site-preview">
+            <div class="preview-card">
+                <h4>📖 теория</h4>
+                <ul>
+                    <li>структурированные vs простые типы</li>
+                    <li>одномерные, двумерные массивы</li>
+                    <li>пузырьковая, выбором, вставками</li>
+                    <li>оценка сложности O(n²) и не только</li>
+                </ul>
+            </div>
+            <div class="preview-card">
+                <h4>💻 практика</h4>
+                <ul>
+                    <li>песочница: генерация, min/max, сумма</li>
+                    <li>поэлементная визуализация</li>
+                    <li>анимированная сортировка</li>
+                    <li>скорость, шаги, лог сравнений</li>
+                </ul>
+            </div>
+            <div class="preview-card">
+                <h4>🔬 тест / задачи</h4>
+                <ul>
+                    <li>интерактивные вопросы</li>
+                    <li>сравнение алгоритмов</li>
+                    <li>задачи для самостоятельной работы</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Призыв к действию и кнопки перехода (заглушки навигации, можно заменить ссылками позже) -->
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center;">
+            <a href="#" class="neon-button">📚 ТЕОРИЯ</a>
+            <a href="#" class="neon-button">🛠️ ПРАКТИКУМ</a>
+            <a href="#" class="neon-button">🧠 ТЕСТ</a>
+        </div>
+
+        <!-- дополнительный акцент про сортировки -->
+        <p style="text-align: center; margin-top: 2rem; font-size: 1.1rem; border-top: 1px dashed #0ff; padding-top: 1.5rem;">
+            🌐 <span class="glow-text">структурированные типы данных + массивы + сортировка</span> — основа алгоритмического мышления.
+            Всё это ждёт вас внутри разделов.
+        </p>
+
+        <footer>
+            ⚡ индивидуальный проект · неоновая версия ⚡
+        </footer>
+    </div>
+</body>
+</html>
