@@ -3,8 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная | Массивы и сортировка</title>
+    <title>ArrayVision | Массивы и алгоритмы сортировки</title>
+    
+    <!-- Современные шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* CSS Variables для легкой настройки */
+        :root {
+            --bg-primary: #0a0c14;
+            --bg-secondary: #121624;
+            --bg-tertiary: #1a1f2c;
+            --accent-primary: #00fff2;
+            --accent-secondary: #00b8ff;
+            --accent-glow: rgba(0, 255, 242, 0.5);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8d1;
+            --text-tertiary: #6e7a94;
+            --gradient-1: linear-gradient(135deg, #00fff2 0%, #00b8ff 100%);
+            --gradient-2: linear-gradient(135deg, #ff36b0 0%, #ff8e36 100%);
+            --gradient-3: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(0, 255, 242, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Базовые стили */
         * {
             margin: 0;
             padding: 0;
@@ -12,345 +41,791 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b0f1a;
-            color: #ccd6f0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
             line-height: 1.6;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* неоновый контейнер с эффектом свечения */
-        .neon-card {
-            max-width: 1000px;
+        /* Анимированный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(10, 20, 30, 0.75);
-            backdrop-filter: blur(8px);
-            border: 2px solid #00ffe1;
-            box-shadow: 0 0 20px #00ffe1, 0 0 40px #00b8ff, inset 0 0 15px rgba(0, 255, 255, 0.3);
-            border-radius: 32px;
-            padding: 2.5rem 2rem;
-            transition: box-shadow 0.3s ease;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 255, 242, 0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 184, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
-        .neon-card:hover {
-            box-shadow: 0 0 30px #00ffff, 0 0 60px #1effbc, inset 0 0 20px #7effe6;
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 10px;
         }
 
-        /* заголовки с неоном */
-        h1 {
-            font-size: 3.2rem;
-            font-weight: 700;
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 5px;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Современная навигация */
+        .navbar {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 4rem);
+            max-width: 1200px;
+            background: rgba(10, 12, 20, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            -webkit-text-fill-color: initial;
+            color: var(--accent-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--accent-primary);
+        }
+
+        /* Главный контент */
+        .main-content {
+            margin-top: 8rem;
+        }
+
+        /* Хедер секция */
+        .hero {
             text-align: center;
-            color: #a0ffec;
-            text-shadow: 0 0 5px #00ffe1, 0 0 15px #00c8ff, 0 0 30px #0099ff;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0, 255, 242, 0.1);
+            border: 1px solid var(--accent-primary);
+            border-radius: 100px;
+            padding: 0.5rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 0.75rem;
+            color: var(--accent-primary);
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.2);
         }
 
-        h2 {
-            font-size: 2.2rem;
-            color: #aaffdd;
-            text-shadow: 0 0 4px #00ffe1, 0 0 12px #00ccaa;
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1.1;
             margin-bottom: 1.5rem;
-            border-left: 5px solid #0ff;
-            padding-left: 1.2rem;
+            background: linear-gradient(135deg, #fff 0%, #a0b0ff 50%, #00fff2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        h3 {
-            font-size: 1.6rem;
-            color: #b5ffea;
-            text-shadow: 0 0 3px #1effbc;
+        .hero h1 span {
+            display: block;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #00fff2 0%, #00b8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            background: rgba(0, 255, 242, 0.02);
+            padding: 2rem;
+            border-radius: 30px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Секция цели */
+        .goal-section {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 3rem;
+            margin-bottom: 5rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goal-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-1);
+            border-radius: 52px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .goal-title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-primary);
             margin-bottom: 1rem;
         }
 
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: #cce5ff;
+        .goal-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
         }
 
-        /* навигационные блоки */
-        .nav-highlight {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.8rem;
-            margin: 2.5rem 0 1rem;
-            justify-content: center;
-        }
-
-        .nav-item {
-            flex: 1 1 200px;
-            background: rgba(0, 255, 200, 0.07);
-            border: 1px solid #0ff;
-            border-radius: 30px;
-            padding: 1.8rem 1.2rem;
-            text-align: center;
-            backdrop-filter: blur(4px);
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
-        }
-
-        .nav-item:hover {
-            transform: translateY(-6px);
-            background: rgba(0, 255, 200, 0.15);
-            box-shadow: 0 0 28px #00ffe1, 0 0 40px #0077ff;
-            border-color: #ffffff;
-        }
-
-        .nav-item span {
-            font-size: 3rem;
-            display: block;
-            margin-bottom: 0.5rem;
-            filter: drop-shadow(0 0 8px cyan);
-        }
-
-        .nav-item strong {
-            font-size: 1.8rem;
-            color: #adffd8;
-            text-shadow: 0 0 5px cyan;
-        }
-
-        .nav-item p {
-            font-size: 1rem;
-            margin: 0.8rem 0 0;
-            color: #bbf0ff;
-        }
-
-        /* кнопка в стиле неон */
-        .neon-button {
-            display: inline-block;
-            background: transparent;
-            color: #00ffd5;
-            font-size: 1.3rem;
-            font-weight: 600;
-            padding: 0.8rem 2.5rem;
-            border-radius: 50px;
-            border: 2px solid #0ff;
-            text-decoration: none;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px #0ff, inset 0 0 10px #0ff;
-            transition: all 0.2s;
-            margin-top: 1rem;
-            margin-right: 1rem;
-        }
-
-        .neon-button:hover {
-            background: #0ff;
-            color: #0a121c;
-            box-shadow: 0 0 30px cyan, 0 0 60px deepskyblue;
-            border-color: white;
-        }
-
-        /* цель + задачи в виде сетки */
-        .goal-block {
-            background: rgba(0, 255, 200, 0.05);
-            border-radius: 40px;
-            padding: 2rem;
-            border: 1px solid #1effbc;
-            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.2), 0 0 30px rgba(0, 255, 200, 0.2);
-            margin: 2rem 0;
-        }
-
-        .tasks {
+        .tasks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
-            margin-top: 1.8rem;
         }
 
-        .task-item {
-            background: rgba(0, 30, 40, 0.6);
-            border-radius: 24px;
-            padding: 1.5rem 1rem;
-            border-left: 6px solid #0ff;
-            box-shadow: 0 0 12px #00b8b0;
-            font-size: 1.1rem;
-            font-weight: 500;
-            backdrop-filter: blur(3px);
+        .task-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .task-item::before {
-            content: "⚡";
-            color: #0ff;
-            font-size: 1.8rem;
-            display: block;
-            margin-bottom: 0.5rem;
-            filter: drop-shadow(0 0 6px cyan);
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: width 0.3s;
         }
 
-        /* футер с навигацией по сайту (краткий обзор) */
-        .site-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            justify-content: space-between;
-            margin: 2rem 0 1.5rem;
+        .task-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 255, 242, 0.1);
         }
 
-        .preview-card {
-            background: #021016;
-            border: 1px solid #0ff;
-            border-radius: 28px;
-            padding: 1.8rem 1.5rem;
-            flex: 1 1 250px;
-            box-shadow: 0 0 20px #00b8b0;
+        .task-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
         }
 
-        .preview-card h4 {
+        .task-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .task-card h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .task-card p {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+        }
+
+        /* Секция навигации */
+        .nav-sections {
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 40px;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 30px 60px rgba(0, 255, 242, 0.15);
+        }
+
+        .section-card.theory:hover {
+            box-shadow: 0 30px 60px rgba(124, 58, 237, 0.2);
+        }
+
+        .section-card.practice:hover {
+            box-shadow: 0 30px 60px rgba(255, 54, 176, 0.2);
+        }
+
+        .section-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        .section-card h3 {
             font-size: 2rem;
-            color: #a0ffec;
-            text-shadow: 0 0 6px cyan;
-            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
         }
 
-        .preview-card ul {
+        .section-card p {
+            color: var(--text-tertiary);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
             list-style: none;
         }
 
-        .preview-card li {
+        .feature-list li {
             margin-bottom: 0.8rem;
-            font-size: 1.1rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.8rem;
+            color: var(--text-secondary);
         }
 
-        .preview-card li::before {
-            content: "▹";
-            color: #0ff;
-            font-size: 1.5rem;
-            line-height: 1;
-            text-shadow: 0 0 8px cyan;
-        }
-
-        /* декоративная линия */
-        .divider {
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #0ff, #1effbc, #0ff, transparent);
-            box-shadow: 0 0 15px #0ff;
-            margin: 2rem 0;
-        }
-
-        /* небольшие детали */
-        .glow-text {
-            color: #a8fff0;
-            text-shadow: 0 0 4px #0ff;
-        }
-
-        footer {
-            margin-top: 2rem;
+        .feature-list li i {
+            color: var(--accent-primary);
             font-size: 1rem;
-            color: #6699cc;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2.2rem; }
-            h2 { font-size: 1.8rem; }
-            .neon-card { padding: 1.5rem; }
+        /* Преимущества */
+        .features-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Кнопка по центру */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 4rem 0;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--bg-primary);
+            box-shadow: 0 10px 20px rgba(0, 255, 242, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 255, 242, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary i {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .btn-primary:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 5rem;
+            padding: 3rem 0;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-tertiary);
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-primary);
+            transform: translateY(-3px);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                border-radius: 30px;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero h1 span {
+                font-size: 2rem;
+            }
+
+            .goal-text {
+                font-size: 1.8rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Анимации */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 20px rgba(0, 255, 242, 0.2); }
+            50% { box-shadow: 0 20px 40px rgba(0, 255, 242, 0.4); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .btn-primary {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        /* Статистика */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Градиентные акценты */
+        .gradient-badge {
+            background: var(--gradient-1);
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="neon-card">
-        <!-- Приветствие и тема проекта -->
-        <h1>⚡ СТРУКТУРЫ ДАННЫХ ⚡</h1>
-        <h1 style="font-size: 2.6rem; margin-top: -0.5rem;">МАССИВЫ · СОРТИРОВКА</h1>
-        <div style="text-align: center; margin: 1rem 0 0.5rem;">
-            <span style="background: #0a1f26; padding: 0.2rem 1.5rem; border-radius: 60px; border: 1px solid cyan; box-shadow: 0 0 8px cyan; font-weight: 600;">индивидуальный проект</span>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            <span>ArrayVision</span>
         </div>
-
-        <!-- Краткое введение -->
-        <h2>⚡ приветствие</h2>
-        <p>Структурированные типы данных — способ организации сложной информации. В центре вселенной программирования находится <span class="glow-text"><strong>массив</strong></span>: упорядоченный набор элементов, доступ к которым мгновенен по индексу. Массивы — это фундамент, на котором строятся алгоритмы, базы данных и интерфейсы.</p>
-        <p>Сортировка превращает хаос в порядок: поиск, анализ, принятие решений — всё ускоряется, когда данные организованы. Понимание сортировок даёт ключ к написанию эффективного кода.</p>
-
-        <!-- Цель и задачи проекта (сформулировано) -->
-        <div class="goal-block">
-            <h3 style="margin-bottom: 0.2rem;">🎯 цель проекта</h3>
-            <p style="font-size: 1.5rem; font-weight: 600; text-shadow: 0 0 5px cyan;">«Объяснить принципы работы с массивами и научить основным алгоритмам сортировки»</p>
-
-            <div class="tasks">
-                <div class="task-item"><strong>Задача 1:</strong> Показать внутреннее устройство массивов (индексация, память, типы)</div>
-                <div class="task-item"><strong>Задача 2:</strong> Разобрать базовые операции: поиск, вставка, удаление</div>
-                <div class="task-item"><strong>Задача 3:</strong> Визуализировать пузырьковую, выбором и вставками сортировки</div>
-                <div class="task-item"><strong>Задача 4:</strong> Дать возможность пользователю самому управлять процессом сортировки</div>
-            </div>
+        <div class="nav-links">
+            <a href=" " class="nav-link active">Главная</a>
+            <a href="theory/" class="nav-link">Теория</a>
+            <a href="#" class="nav-link">Практика</a>
+            <a href="#" class="nav-link">Тест</a>
+            <a href="#" class="nav-link">О проекте</a>
         </div>
-
-        <!-- Навигация по сайту (краткий обзор) + неоновые кнопки -->
-        <h2>🌀 навигация / разделы</h2>
-        <div class="nav-highlight">
-            <div class="nav-item">
-                <span>📘</span>
-                <strong>ТЕОРИЯ</strong>
-                <p>типы данных · массивы · алгоритмы сортировки · сложность</p>
-            </div>
-            <div class="nav-item">
-                <span>⚙️</span>
-                <strong>ПРАКТИКА</strong>
-                <p>интерактивная песочница · визуализатор · сравнение алгоритмов</p>
-            </div>
-            <div class="nav-item">
-                <span>🧪</span>
-                <strong>ТЕСТ</strong>
-                <p>проверь знания · вопросы по теории массивов</p>
-            </div>
+        <div>
+            <span class="gradient-badge">v2.0</span>
         </div>
+    </nav>
 
-        <!-- чуть подробнее про теорию и практику (краткий обзор) -->
-        <div class="site-preview">
-            <div class="preview-card">
-                <h4>📖 теория</h4>
-                <ul>
-                    <li>структурированные vs простые типы</li>
-                    <li>одномерные, двумерные массивы</li>
-                    <li>пузырьковая, выбором, вставками</li>
-                    <li>оценка сложности O(n²) и не только</li>
-                </ul>
+    <div class="container">
+        <div class="main-content">
+            <!-- Hero секция -->
+            <section class="hero">
+                <div class="hero-badge floating">
+                    <i class="fas fa-bolt"></i> ИНДИВИДУАЛЬНЫЙ ПРОЕКТ
+                </div>
+                <h1>
+                    СТРУКТУРЫ ДАННЫХ
+                    <span>МАССИВЫ · СОРТИРОВКА</span>
+                </h1>
+                <div class="hero-description">
+                    <i class="fas fa-quote-left" style="opacity: 0.3; margin-right: 0.5rem;"></i>
+                    Массивы — это фундамент программирования. Пойми, как они работают, и ты поймешь, как работают алгоритмы.
+                    <i class="fas fa-quote-right" style="opacity: 0.3; margin-left: 0.5rem;"></i>
+                </div>
+            </section>
+
+            <!-- Статистика -->
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">алгоритма сортировки</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">тем теории</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">интерактива</div>
+                </div>
             </div>
-            <div class="preview-card">
-                <h4>💻 практика</h4>
-                <ul>
-                    <li>песочница: генерация, min/max, сумма</li>
-                    <li>поэлементная визуализация</li>
-                    <li>анимированная сортировка</li>
-                    <li>скорость, шаги, лог сравнений</li>
-                </ul>
+
+            <!-- Цель проекта -->
+            <section class="goal-section">
+                <div class="goal-title">
+                    <i class="fas fa-bullseye"></i> ЦЕЛЬ ПРОЕКТА
+                </div>
+                <div class="goal-text">
+                    Объяснить принципы работы с массивами<br>и научить основным алгоритмам сортировки
+                </div>
+                
+                <div class="tasks-grid">
+                    <div class="task-card">
+                        <div class="task-icon"><i class="fas fa-cubes"></i></div>
+                        <h3>Устройство массивов</h3>
+                        <p>Индексация, память, типы данных — всё, что нужно знать о структуре массивов</p>
+                    </div>
+                    <div class="task-card">
+                        <div class="task-icon"><i class="fas fa-search"></i></div>
+                        <h3>Базовые операции</h3>
+                        <p>Поиск, вставка, удаление — научись управлять данными эффективно</p>
+                    </div>
+                    <div class="task-card">
+                        <div class="task-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Визуализация</h3>
+                        <p>Увидь, как работают пузырьковая, выбором и вставками сортировки</p>
+                    </div>
+                    <div class="task-card">
+                        <div class="task-icon"><i class="fas fa-gamepad"></i></div>
+                        <h3>Интерактивность</h3>
+                        <p>Управляй процессом сортировки сам — лучший способ понять алгоритм</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Навигация по разделам -->
+            <section class="nav-sections">
+                <h2 class="section-title">ИССЛЕДУЙТЕ РАЗДЕЛЫ</h2>
+                
+                <div class="sections-grid">
+                    <a href="#" class="section-card theory">
+                        <div class="section-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>Теория</h3>
+                        <p>Глубокое погружение в мир массивов и алгоритмов</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Типы данных</li>
+                            <li><i class="fas fa-check-circle"></i> Одномерные и двумерные массивы</li>
+                            <li><i class="fas fa-check-circle"></i> 3 алгоритма сортировки</li>
+                            <li><i class="fas fa-check-circle"></i> Оценка сложности</li>
+                        </ul>
+                        <div style="margin-top: 2rem;">
+                            <span class="gradient-badge">9 уроков</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="section-card practice">
+                        <div class="section-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Практика</h3>
+                        <p>Интерактивные эксперименты с массивами</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Песочница для экспериментов</li>
+                            <li><i class="fas fa-check-circle"></i> Визуализатор сортировок</li>
+                            <li><i class="fas fa-check-circle"></i> Генерация случайных массивов</li>
+                            <li><i class="fas fa-check-circle"></i> Пошаговый разбор</li>
+                        </ul>
+                        <div style="margin-top: 2rem;">
+                            <span class="gradient-badge">3 тренажера</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Преимущества -->
+            <div class="features-showcase">
+                <div class="feature-item">
+                    <i class="fas fa-rocket"></i>
+                    <h4>Современный подход</h4>
+                    <p>Актуальные примеры и объяснения</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-eye"></i>
+                    <h4>Наглядная визуализация</h4>
+                    <p>Увидь работу алгоритмов</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-brain"></i>
+                    <h4>Для любого уровня</h4>
+                    <p>От новичка до профессионала</p>
+                </div>
             </div>
-            <div class="preview-card">
-                <h4>🔬 тест / задачи</h4>
-                <ul>
-                    <li>интерактивные вопросы</li>
-                    <li>сравнение алгоритмов</li>
-                    <li>задачи для самостоятельной работы</li>
-                </ul>
+
+            <!-- Кнопка по центру -->
+            <div class="button-container">
+                <a href="theory/" class="btn btn-primary">
+                    Начать обучение
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
+
+            <!-- Футер -->
+            <footer class="footer">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                    <span>ArrayVision</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#">О проекте</a>
+                    <a href="#">Документация</a>
+                    <a href="#">Контакты</a>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </footer>
         </div>
-
-        <div class="divider"></div>
-
-        <!-- Призыв к действию и кнопки перехода (заглушки навигации, можно заменить ссылками позже) -->
-        <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center;">
-            <a href="#" class="neon-button">📚 ТЕОРИЯ</a>
-            <a href="#" class="neon-button">🛠️ ПРАКТИКУМ</a>
-            <a href="#" class="neon-button">🧠 ТЕСТ</a>
-        </div>
-
-        <!-- дополнительный акцент про сортировки -->
-        <p style="text-align: center; margin-top: 2rem; font-size: 1.1rem; border-top: 1px dashed #0ff; padding-top: 1.5rem;">
-            🌐 <span class="glow-text">структурированные типы данных + массивы + сортировка</span> — основа алгоритмического мышления.
-            Всё это ждёт вас внутри разделов.
-        </p>
-
-        <footer>
-            ⚡ индивидуальный проект · неоновая версия ⚡
-        </footer>
     </div>
+
+    <!-- Небольшой JS для интерактивности -->
+    <script>
+        // Добавляем класс active для текущей страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLocation = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentLocation) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Плавный скролл для якорей
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

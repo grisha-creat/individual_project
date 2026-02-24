@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Практика | ArrayVision</title>
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0c14;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+
+        /* Навигация */
+        .navbar {
+            background: rgba(10, 12, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #00fff2;
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #00fff2;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            text-shadow: 0 0 10px #00fff2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00fff2;
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Заголовок страницы */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #00fff2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* Панель управления */
+        .control-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            color: #00fff2;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00fff2;
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+            color: #e0e0e0;
+            border: 1px solid #333;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #00fff2;
+            color: #0a0c14;
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px #00fff2;
+            transform: scale(1.02);
+        }
+
+        .btn-outline {
+            border: 1px solid #00fff2;
+            color: #00fff2;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 255, 242, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Отображение массива */
+        .array-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .array-title {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .array-length {
+            background: #00fff2;
+            color: #0a0c14;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .array-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .array-item {
+            width: 70px;
+            background: rgba(0, 255, 242, 0.05);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .array-item:hover {
+            border-color: #00fff2;
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .array-item.min-highlight {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .array-item.max-highlight {
+            border-color: #ff4444;
+            box-shadow: 0 0 20px #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .array-item.search-highlight {
+            border-color: #ffaa00;
+            box-shadow: 0 0 20px #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .array-index {
+            background: #111;
+            padding: 0.3rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #888;
+            border-bottom: 1px solid #333;
+        }
+
+        .array-value {
+            padding: 1rem 0;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Результаты */
+        .results-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00fff2;
+            text-shadow: 0 0 10px rgba(0, 255, 242, 0.5);
+        }
+
+        /* Поиск */
+        .search-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.8rem 1rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00fff2;
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        .search-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 255, 242, 0.05);
+            border: 1px solid #333;
+            border-radius: 10px;
+            color: #b0b0b0;
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00fff2;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+            .array-grid {
+                gap: 0.5rem;
+            }
+            .array-item {
+                width: 50px;
+            }
+            .footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="logo">⚡ ArrayVision</a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Главная</a>
+                <a href="{% url 'theory:theory_page' %}">Теория</a>
+                <a href="{% url 'practice:practice_page' %}" class="active">Практика</a>
+                <a href="#">Тест</a>
+                <a href="#">О проекте</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Заголовок страницы -->
+        <div class="page-header">
+            <h1>ПРАКТИКУМ</h1>
+            <p>Создавайте массивы, экспериментируйте с операциями и изучайте результаты</p>
+        </div>
+
+        <!-- Панель управления -->
+        <div class="control-panel">
+            <div class="panel-title">
+                <span>⚙️</span> Управление массивом
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <div class="input-field">
+                        <label>{{ array_form.size.label }}</label>
+                        {{ array_form.size }}
+                    </div>
+                    <div class="input-field">
+                        <label>{{ array_form.min_val.label }}</label>
+                        {{ array_form.min_val }}
+                    </div>
+                    <div class="input-field">
+                        <label>{{ array_form.max_val.label }}</label>
+                        {{ array_form.max_val }}
+                    </div>
+                    <button type="submit" name="generate" class="btn btn-primary">
+                        <span>🎲</span> Сгенерировать
+                    </button>
+                    <button type="submit" name="clear" class="btn btn-outline">
+                        <span>🗑️</span> Очистить
+                    </button>
+                </div>
+            </form>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="btn-group">
+                    <button type="submit" name="find_min" class="btn btn-outline">
+                        <span>⬇️</span> Минимум
+                    </button>
+                    <button type="submit" name="find_max" class="btn btn-outline">
+                        <span>⬆️</span> Максимум
+                    </button>
+                    <button type="submit" name="find_sum" class="btn btn-outline">
+                        <span>➕</span> Сумма
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Отображение массива -->
+        <div class="array-container">
+            <div class="array-title">
+                <span>📊 Текущий массив</span>
+                <span class="array-length">Длина: {{ array_length }}</span>
+            </div>
+            
+            <div class="array-grid">
+                {% if current_array %}
+                    {% for value in current_array %}
+                        <div class="array-item 
+                            {% if forloop.counter0 in highlight_indices %}
+                                {% if highlight_type == 'min' %}min-highlight
+                                {% elif highlight_type == 'max' %}max-highlight
+                                {% elif highlight_type == 'search' %}search-highlight
+                                {% endif %}
+                            {% endif %}">
+                            <div class="array-index">[{{ forloop.counter0 }}]</div>
+                            <div class="array-value">{{ value }}</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #888;">Массив пуст. Сгенерируйте новый массив.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Результаты операций -->
+        <div class="results-panel">
+            <div class="panel-title">
+                <span>📋</span> Результаты
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-label">
+                        <span>⬇️</span> Минимум
+                    </div>
+                    <div class="result-value">
+                        {% if min_result %}{{ min_result }}{% else %}—{% endif %}
+                    </div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">
+                        <span>⬆️</span> Максимум
+                    </div>
+                    <div class="result-value">
+                        {% if max_result %}{{ max_result }}{% else %}—{% endif %}
+                    </div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">
+                        <span>➕</span> Сумма
+                    </div>
+                    <div class="result-value">
+                        {% if sum_result %}{{ sum_result }}{% else %}—{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Поиск элемента -->
+            <div class="search-section">
+                <div class="panel-title" style="margin-bottom: 1rem;">
+                    <span>🔍</span> Поиск элемента
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="search-box">
+                        {{ search_form.search_value }}
+                        <button type="submit" name="search" class="btn btn-primary">
+                            <span>🔍</span> Найти
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="search-result">
+                    {% if search_result %}
+                        {{ search_result }}
+                    {% else %}
+                        Введите число и нажмите "Найти"
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <footer class="footer">
+            <div>⚡ ArrayVision © 2026</div>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">Telegram</a>
+                <a href="#">Discord</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

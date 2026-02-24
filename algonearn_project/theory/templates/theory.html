@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теория | ArrayVision</title>
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0c14;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+
+        /* Навигация */
+        .navbar {
+            background: rgba(10, 12, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #00fff2;
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #00fff2;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            text-shadow: 0 0 10px #00fff2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00fff2;
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Заголовок страницы */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #00fff2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* Вкладки */
+        .theory-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+            scrollbar-width: thin;
+            scrollbar-color: #00fff2 #333;
+        }
+
+        .theory-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .theory-tabs::-webkit-scrollbar-track {
+            background: #333;
+        }
+
+        .theory-tabs::-webkit-scrollbar-thumb {
+            background: #00fff2;
+            border-radius: 4px;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+        }
+
+        .tab-btn:hover {
+            border-color: #00fff2;
+            color: #00fff2;
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        .tab-btn.active {
+            background: #00fff2;
+            color: #0a0c14;
+            border-color: #00fff2;
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.5);
+        }
+
+        /* Контент вкладок */
+        .tab-content {
+            display: none;
+            animation: fade 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Карточки для контента */
+        .content-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-card h2 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #00fff2;
+            padding-left: 1rem;
+        }
+
+        .content-card h3 {
+            font-size: 1.3rem;
+            color: #00fff2;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .content-card p {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+            line-height: 1.7;
+        }
+
+        .content-card ul, .content-card ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: #b0b0b0;
+        }
+
+        .content-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card strong {
+            color: #00fff2;
+        }
+
+        /* Примеры массивов (визуальные) */
+        .array-viz {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            justify-content: center;
+        }
+
+        .array-cell {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 255, 242, 0.1);
+            border: 1px solid #00fff2;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0, 255, 242, 0.3);
+        }
+
+        .array-index {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .array-value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Блоки кода */
+        .code-block {
+            background: #111;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: #00fff2;
+            border: 1px solid #333;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .code-block pre {
+            margin: 0;
+        }
+
+        /* Таблица */
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #111;
+            color: #00fff2;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+            color: #e0e0e0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge.good {
+            background: rgba(0, 255, 0, 0.1);
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+
+        .badge.medium {
+            background: rgba(255, 255, 0, 0.1);
+            color: #ff0;
+            border: 1px solid #ff0;
+        }
+
+        .badge.bad {
+            background: rgba(255, 0, 0, 0.1);
+            color: #f00;
+            border: 1px solid #f00;
+        }
+
+        /* Кнопка */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: #00fff2;
+            color: #0a0c14;
+            border: none;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 30px #00fff2;
+            transform: scale(1.05);
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00fff2;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">⚡ ArrayVision</a>
+            <div class="nav-links">
+                <a href=" ">Главная</a>
+                <a href="/theory/" class="active">Теория</a>
+                <a href="/practice/">Практика</a>
+                <a href="#">Тест</a>
+                <a href="#">О проекте</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Заголовок страницы -->
+        <div class="page-header">
+            <h1>ТЕОРИЯ</h1>
+            <p>Изучите основы типов данных, массивов и алгоритмов сортировки</p>
+        </div>
+
+        <!-- Вкладки -->
+        <div class="theory-tabs">
+            <button class="tab-btn active" data-tab="data-types">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/>
+                    <path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/>
+                </svg>
+                Типы данных
+            </button>
+            <button class="tab-btn" data-tab="arrays">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
+                    <path d="M3 12A9 3 0 0 0 21 12"/>
+                </svg>
+                Массивы
+            </button>
+            <button class="tab-btn" data-tab="why-sort">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m21 16-4 4-4-4"/>
+                    <path d="M17 20V4"/>
+                    <path d="m3 8 4-4 4 4"/>
+                    <path d="M7 4v16"/>
+                </svg>
+                Зачем сортировать?
+            </button>
+            <button class="tab-btn" data-tab="algorithms">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
+                    <path d="M18 17V9"/>
+                    <path d="M13 17V5"/>
+                    <path d="M8 17v-3"/>
+                </svg>
+                Алгоритмы
+            </button>
+        </div>
+
+        <!-- Контент для вкладки "Типы данных" -->
+        <div id="data-types" class="tab-content active">
+            <div class="content-card">
+                <h2>Типы данных</h2>
+                <p>В программировании типы данных делятся на простые и структурированные. Простые типы хранят одно значение (число, символ, логическое значение), а структурированные — набор значений, объединённых по какому-либо принципу.</p>
+
+                <h3>Простые типы</h3>
+                <ul>
+                    <li><strong>Целые числа</strong> (int)</li>
+                    <li><strong>Вещественные числа</strong> (float)</li>
+                    <li><strong>Символы</strong> (char)</li>
+                    <li><strong>Логический тип</strong> (boolean)</li>
+                </ul>
+
+                <h3>Структурированные типы</h3>
+                <ul>
+                    <li><strong>Массивы</strong> — упорядоченные наборы</li>
+                    <li><strong>Структуры (записи)</strong></li>
+                    <li><strong>Множества</strong></li>
+                    <li><strong>Файлы</strong></li>
+                </ul>
+
+                <p>💡 <strong>Ключевая идея:</strong> Массив — самый простой и распространённый структурированный тип данных. Это фундамент, на котором строятся более сложные структуры.</p>
+            </div>
+        </div>
+
+        <!-- Контент для вкладки "Массивы" -->
+        <div id="arrays" class="tab-content">
+            <div class="content-card">
+                <h2>Массивы</h2>
+                <p>Массив — это упорядоченный набор однотипных элементов, каждый из которых имеет свой номер (индекс). Нумерация обычно начинается с 0.</p>
+
+                <div class="array-viz">
+                    <div class="array-cell"><span class="array-index">[0]</span><span class="array-value">42</span></div>
+                    <div class="array-cell"><span class="array-index">[1]</span><span class="array-value">17</span></div>
+                    <div class="array-cell"><span class="array-index">[2]</span><span class="array-value">8</span></div>
+                    <div class="array-cell"><span class="array-index">[3]</span><span class="array-value">35</span></div>
+                    <div class="array-cell"><span class="array-index">[4]</span><span class="array-value">91</span></div>
+                    <div class="array-cell"><span class="array-index">[5]</span><span class="array-value">3</span></div>
+                    <div class="array-cell"><span class="array-index">[6]</span><span class="array-value">56</span></div>
+                </div>
+
+                <h3>Характеристики массива</h3>
+                <ul>
+                    <li><strong>Индекс</strong> — номер элемента (начинается с 0)</li>
+                    <li><strong>Длина</strong> — количество элементов</li>
+                    <li><strong>Тип элементов</strong> — все элементы одного типа</li>
+                </ul>
+
+                <h3>Виды массивов</h3>
+                <p><strong>Одномерные</strong> — линейная последовательность элементов. Используются чаще всего.</p>
+                <div class="code-block">
+                    <pre># Python
+arr = [10, 20, 30, 40, 50]
+print(arr[2])  # 30</pre>
+                </div>
+
+                <p><strong>Двумерные (матрицы)</strong> — таблица строк и столбцов. Используются для матриц, таблиц.</p>
+                <div class="code-block">
+                    <pre># Python
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+print(matrix[1][2])  # 6</pre>
+                </div>
+
+                <h3>Основные операции (Python)</h3>
+                <div class="code-block">
+                    <pre># Создание массива
+arr = [64, 34, 25, 12, 22, 11, 90]
+
+# Длина массива
+print(len(arr))  # 7
+
+# Доступ по индексу
+print(arr[0])    # 64
+
+# Поиск элемента
+idx = arr.index(25)  # 2 (индекс элемента)
+
+# Сумма элементов
+total = sum(arr)     # 258
+
+# Минимум и максимум
+minimum = min(arr)   # 11
+maximum = max(arr)   # 90</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контент для вкладки "Зачем сортировать?" -->
+        <div id="why-sort" class="tab-content">
+            <div class="content-card">
+                <h2>Зачем сортировать?</h2>
+                <p>Сортировка — это процесс упорядочивания элементов по возрастанию или убыванию. Это одна из самых важных операций в информатике.</p>
+
+                <h3>🔍 Быстрый поиск</h3>
+                <p>В отсортированном массиве можно искать элементы в разы быстрее (бинарный поиск).</p>
+
+                <h3>📂 Удобство</h3>
+                <p>Отсортированные данные проще анализировать и воспринимать.</p>
+
+                <h3>📊 Статистика</h3>
+                <p>Нахождение медианы, квартилей и других статистик требует сортировки.</p>
+
+                <h3>Пример: до и после сортировки</h3>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div>
+                        <p><strong>До:</strong></p>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">64</span>
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">34</span>
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">25</span>
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">12</span>
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">22</span>
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">11</span>
+                            <span style="background: #333; padding: 0.5rem 1rem; border-radius: 8px;">90</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p><strong>После:</strong></p>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">11</span>
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">12</span>
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">22</span>
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">25</span>
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">34</span>
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">64</span>
+                            <span style="background: #00fff2; color: #000; padding: 0.5rem 1rem; border-radius: 8px;">90</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контент для вкладки "Алгоритмы" -->
+        <div id="algorithms" class="tab-content">
+            <div class="content-card">
+                <h2>Алгоритмы сортировки</h2>
+
+                <!-- Пузырьковая -->
+                <h3>🫧 Сортировка пузырьком (Bubble Sort)</h3>
+                <p>Самый простой алгоритм. Сравнивает соседние элементы попарно и меняет их местами, если они стоят не в том порядке. Большие элементы «всплывают» к концу массива, как пузырьки.</p>
+                <div class="code-block">
+                    <pre># Python
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        for j in range(n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr</pre>
+                </div>
+                <p><strong>Сложность:</strong> O(n²) | <strong>Простота:</strong> ★★★ | <strong>Скорость:</strong> ★☆☆</p>
+
+                <!-- Выбором -->
+                <h3>👆 Сортировка выбором (Selection Sort)</h3>
+                <p>На каждом шаге находит минимальный элемент в неотсортированной части и ставит его на своё место.</p>
+                <div class="code-block">
+                    <pre># Python
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr</pre>
+                </div>
+                <p><strong>Сложность:</strong> O(n²) | <strong>Простота:</strong> ★★★ | <strong>Скорость:</strong> ★☆☆</p>
+
+                <!-- Вставками -->
+                <h3>📥 Сортировка вставками (Insertion Sort)</h3>
+                <p>Берёт каждый следующий элемент и вставляет его на правильное место среди уже отсортированных. Как сортировка карт в руке.</p>
+                <div class="code-block">
+                    <pre># Python
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr</pre>
+                </div>
+                <p><strong>Сложность:</strong> O(n²) | <strong>Простота:</strong> ★★☆ | <strong>Скорость:</strong> ★★☆</p>
+
+                <!-- Таблица сравнения -->
+                <h3>📊 Сравнение алгоритмов</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Алгоритм</th>
+                                <th>Лучший случай</th>
+                                <th>Средний случай</th>
+                                <th>Худший случай</th>
+                                <th>Память</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Пузырьком</td>
+                                <td><span class="badge good">O(n)</span></td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td>O(1)</td>
+                            </tr>
+                            <tr>
+                                <td>Выбором</td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td>O(1)</td>
+                            </tr>
+                            <tr>
+                                <td>Вставками</td>
+                                <td><span class="badge good">O(n)</span></td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td><span class="badge bad">O(n²)</span></td>
+                                <td>O(1)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка перехода к практике (пример) -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/practice/" class="btn">Перейти к практике →</a>
+        </div>
+
+        <!-- Футер -->
+        <footer class="footer">
+            <div>⚡ ArrayVision © 2026</div>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">Telegram</a>
+                <a href="#">Discord</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Переключение вкладок
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Убрать активный класс у всех табов
+                tabs.forEach(t => t.classList.remove('active'));
+                // Добавить активный класс текущему табу
+                tab.classList.add('active');
+
+                // Скрыть весь контент
+                contents.forEach(c => c.classList.remove('active'));
+
+                // Показать нужный контент
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
