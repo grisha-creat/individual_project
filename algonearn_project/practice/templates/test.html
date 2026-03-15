@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест | ArrayVision</title>
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0c14;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+
+        /* Навигация */
+        .navbar {
+            background: rgba(10, 12, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #00fff2;
+            box-shadow: 0 0 20px rgba(0, 255, 242, 0.3);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #00fff2;
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            text-shadow: 0 0 10px #00fff2;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #00fff2;
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Заголовок страницы */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #00fff2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* Тест */
+        .test-section {
+            margin-bottom: 2rem;
+        }
+
+        .test-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .test-card h2 {
+            color: #00fff2;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .question {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+        }
+
+        .question h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .answer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .answer:hover {
+            border-color: #00fff2;
+            background: rgba(0, 255, 242, 0.05);
+        }
+
+        .answer-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .answer input[type="radio"] {
+            display: none;
+        }
+
+        .answer input[type="radio"]:checked + .answer-marker {
+            border-color: #00fff2;
+            background: #00fff2;
+            color: #0a0c14;
+        }
+
+        .answer-text {
+            flex: 1;
+            color: #e0e0e0;
+        }
+
+        /* Правильные ответы (будут видны после отправки) */
+        .correct-answer {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #111;
+            border: 1px solid #00ff88;
+            border-radius: 15px;
+            color: #00ff88;
+        }
+
+        .correct-answer .explanation {
+            color: #b0b0b0;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Кнопки */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+            color: #e0e0e0;
+            border: 1px solid #333;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #00fff2;
+            color: #0a0c14;
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px #00fff2;
+            transform: scale(1.02);
+        }
+
+        .btn-outline {
+            border: 1px solid #00fff2;
+            color: #00fff2;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 255, 242, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 242, 0.3);
+        }
+
+        /* Результаты */
+        .results-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .result-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00fff2;
+        }
+
+        /* Таблица правильных ответов */
+        .answers-table {
+            margin-top: 2rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr 100px;
+            background: rgba(0, 255, 242, 0.1);
+            padding: 1rem;
+            font-weight: 600;
+            color: #00fff2;
+            border-bottom: 1px solid #333;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr 100px;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row.correct {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .table-row.incorrect {
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .status-correct {
+            color: #00ff88;
+        }
+
+        .status-incorrect {
+            color: #ff4444;
+        }
+
+        /* Футер */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00fff2;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .table-header, .table-row {
+                grid-template-columns: 60px 1fr 1fr 70px;
+                font-size: 0.8rem;
+            }
+            .footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">⚡ ArrayVision</a>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/theory/">Теория</a>
+                <a href="/practice/">Практика</a>
+                <a href="#" class="active">Тест</a>
+                <a href="#">О проекте</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Заголовок страницы -->
+        <div class="page-header">
+            <h1>ТЕСТ</h1>
+            <p>Проверьте свои знания по теме "Массивы и сортировки"</p>
+        </div>
+
+        <!-- Форма теста -->
+        <form method="post" class="test-section">
+            {% csrf_token %}
+            
+            <!-- Вопрос 1 -->
+            <div class="test-card">
+                <h2>Вопрос 1 из 10</h2>
+                <div class="question">
+                    <h3>Что такое массив?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q1" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Структура данных, хранящая элементы одного типа в непрерывной области памяти</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q1" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Функция для сортировки чисел</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q1" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Тип данных для хранения одного числа</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q1" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Специальный оператор в Python</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 2 -->
+            <div class="test-card">
+                <h2>Вопрос 2 из 10</h2>
+                <div class="question">
+                    <h3>Какой индекс имеет первый элемент в массиве?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q2" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">1</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q2" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">0</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q2" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">-1</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q2" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Зависит от языка программирования</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 3 -->
+            <div class="test-card">
+                <h2>Вопрос 3 из 10</h2>
+                <div class="question">
+                    <h3>Какая сортировка имеет сложность O(n²) в худшем случае?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q3" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Быстрая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q3" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Сортировка пузырьком</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q3" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Сортировка слиянием</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q3" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Пирамидальная сортировка</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 4 -->
+            <div class="test-card">
+                <h2>Вопрос 4 из 10</h2>
+                <div class="question">
+                    <h3>Что такое структурированные типы данных?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q4" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Типы данных, которые могут содержать несколько элементов</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q4" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Только числа и строки</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q4" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Типы данных, которые нельзя изменять</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q4" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Специальные функции</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 5 -->
+            <div class="test-card">
+                <h2>Вопрос 5 из 10</h2>
+                <div class="question">
+                    <h3>Какой алгоритм сортировки считается самым быстрым в среднем случае?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q5" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Пузырьковая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q5" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Сортировка вставками</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q5" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Быстрая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q5" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Сортировка выбором</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 6 -->
+            <div class="test-card">
+                <h2>Вопрос 6 из 10</h2>
+                <div class="question">
+                    <h3>Что такое 'обмен' (swap) в контексте сортировки?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q6" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Замена одного элемента другим</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q6" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Удаление элемента из массива</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q6" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Добавление нового элемента</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q6" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Сравнение двух элементов</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 7 -->
+            <div class="test-card">
+                <h2>Вопрос 7 из 10</h2>
+                <div class="question">
+                    <h3>Какая сортировка использует опорный элемент (pivot)?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q7" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Пузырьковая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q7" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Сортировка вставками</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q7" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Быстрая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q7" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Сортировка выбором</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 8 -->
+            <div class="test-card">
+                <h2>Вопрос 8 из 10</h2>
+                <div class="question">
+                    <h3>Что произойдет при попытке обратиться к элементу массива по индексу, выходящему за его пределы?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q8" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Вернется 0</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q8" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Ошибка (исключение)</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q8" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Вернется последний элемент</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q8" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Массив автоматически расширится</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 9 -->
+            <div class="test-card">
+                <h2>Вопрос 9 из 10</h2>
+                <div class="question">
+                    <h3>Какой тип сортировки лучше всего подходит для почти отсортированного массива?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q9" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Пузырьковая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q9" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Сортировка вставками</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q9" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Быстрая сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q9" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Все одинаково</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 10 -->
+            <div class="test-card">
+                <h2>Вопрос 10 из 10</h2>
+                <div class="question">
+                    <h3>Что такое 'количество сравнений' в алгоритме сортировки?</h3>
+                    <div class="answers">
+                        <label class="answer">
+                            <input type="radio" name="q10" value="0" required>
+                            <span class="answer-marker">A</span>
+                            <span class="answer-text">Сколько раз элементы менялись местами</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q10" value="1">
+                            <span class="answer-marker">B</span>
+                            <span class="answer-text">Сколько раз алгоритм сравнивал два элемента</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q10" value="2">
+                            <span class="answer-marker">C</span>
+                            <span class="answer-text">Сколько времени заняла сортировка</span>
+                        </label>
+                        <label class="answer">
+                            <input type="radio" name="q10" value="3">
+                            <span class="answer-marker">D</span>
+                            <span class="answer-text">Размер массива</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка отправки -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="submit" name="action" value="submit_test" class="btn btn-primary">
+                    <span>✅</span> Проверить ответы
+                </button>
+            </div>
+        </form>
+
+        <!-- Результаты (будут видны после отправки формы) -->
+        {% if results %}
+        <div class="results-panel">
+            <h2 class="panel-title">📊 Результаты теста</h2>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-label">✅ Правильно</div>
+                    <div class="result-value">{{ results.correct }}</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">❌ Неправильно</div>
+                    <div class="result-value">{{ results.incorrect }}</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">📊 Точность</div>
+                    <div class="result-value">{{ results.accuracy }}%</div>
+                </div>
+            </div>
+
+            <!-- Таблица с ответами -->
+            <div class="answers-table">
+                <div class="table-header">
+                    <div>Вопрос</div>
+                    <div>Ваш ответ</div>
+                    <div>Правильный ответ</div>
+                    <div>Статус</div>
+                </div>
+                
+                {% for answer in results.details %}
+                <div class="table-row {% if answer.is_correct %}correct{% else %}incorrect{% endif %}">
+                    <div>{{ forloop.counter }}</div>
+                    <div>{{ answer.user_answer }}</div>
+                    <div>{{ answer.correct_answer }}</div>
+                    <div class="{% if answer.is_correct %}status-correct{% else %}status-incorrect{% endif %}">
+                        {% if answer.is_correct %}✅{% else %}❌{% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Футер -->
+        <footer class="footer">
+            <div>⚡ ArrayVision © 2026</div>
+            <div class="footer-links">
+                <a href="#">GitHub</a>
+                <a href="#">Telegram</a>
+                <a href="#">Discord</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
